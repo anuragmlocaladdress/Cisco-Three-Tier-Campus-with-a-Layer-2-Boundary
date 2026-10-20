@@ -1,0 +1,43 @@
+hostname Access_Finance
+!
+username anurag privilege 15 secret 5 $1$kCJV$3ToVl73I/0ADo/w.M1oW6.
+no aaa new-model
+no ip domain-lookup
+ip domain-name Hydent@1234
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+interface GigabitEthernet0/0
+ description Uplink Trunks to Distribution
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+ description Host Endpoint Connection
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0050.7966.6808
+ switchport port-security
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet0/2
+ description SPARE - not cabled
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface Vlan10
+ description Management IP
+ ip address 10.10.10.15 255.255.255.0
+!
+ip http server
+ip route 0.0.0.0 0.0.0.0 10.10.10.1
+ip ssh time-out 60
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+end

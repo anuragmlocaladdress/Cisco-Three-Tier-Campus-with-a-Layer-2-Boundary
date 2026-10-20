@@ -1,0 +1,41 @@
+hostname DIST
+!
+spanning-tree mode rapid-pvst
+spanning-tree portfast edge bpduguard default
+spanning-tree extend system-id
+!
+interface GigabitEthernet0/0
+ description Uplink Trunks to Cores
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+ description Uplink Trunks to Cores
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface GigabitEthernet0/2
+ description Downlink Trunks to Access Layer
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface GigabitEthernet0/3
+ description SPARE - not cabled
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+!
+interface Vlan10
+ description Management IP
+ ip address 10.10.10.10 255.255.255.0
+!
+ip http server
+ip route 0.0.0.0 0.0.0.0 10.10.10.1
+ip ssh time-out 60
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+end

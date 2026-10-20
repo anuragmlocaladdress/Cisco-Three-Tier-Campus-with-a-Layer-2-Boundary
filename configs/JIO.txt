@@ -1,0 +1,14 @@
+hostname JIO
+!
+interface GigabitEthernet0/0
+ description FACING_EDGE_ROUTER
+ ip address 49.207.1.1 255.255.255.252
+!
+interface GigabitEthernet0/1
+ description FACING_GOOGLE_SERVER
+ ip address 49.207.2.1 255.255.255.252
+!
+no ip http server
+no ip http secure-server
+ip route 8.8.8.8 255.255.255.255 49.207.2.2
+end

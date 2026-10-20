@@ -1,0 +1,21 @@
+hostname Google_server
+!
+interface Loopback0
+ ip address 8.8.8.8 255.255.255.255
+!
+interface Loopback1
+ ip address 8.8.4.4 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description LINK_TO_AIRTEL
+ ip address 182.79.2.2 255.255.255.252
+!
+interface GigabitEthernet0/1
+ description LINK_TO_JIO
+ ip address 49.207.2.2 255.255.255.252
+!
+no ip http server
+no ip http secure-server
+ip route 49.207.1.0 255.255.255.252 49.207.2.1
+ip route 182.79.1.0 255.255.255.252 182.79.2.1
+end

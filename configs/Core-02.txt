@@ -1,0 +1,103 @@
+hostname Core-02
+!
+username anurag privilege 15 secret 5 $1$k.Oj$.7Ve5STy3drgvYsg1waNp1
+no aaa new-model
+!
+ip domain-name Hydent@1234
+!
+spanning-tree mode rapid-pvst
+spanning-tree loopguard default
+spanning-tree extend system-id
+spanning-tree vlan 10-15 priority 8192
+!
+track 1 interface GigabitEthernet0/2 line-protocol
+!
+interface Port-channel1
+ description Inter-Core_Trunk_Link
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/2
+ description Uplink to Router Gi0/1
+ no switchport
+ ip address 172.16.17.2 255.255.255.252
+!
+interface GigabitEthernet0/3
+ description Downlink Trunk to DIST Gi0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+ spanning-tree guard root
+!
+interface GigabitEthernet1/0
+ description SPARE - not cabled
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+ spanning-tree guard root
+!
+interface Vlan10
+ description Device Mgmt
+ ip address 10.10.10.3 255.255.255.0
+ standby 10 ip 10.10.10.1
+ standby 10 preempt
+ standby 10 authentication md5 key-string SecGroup10
+ standby 10 track 1 decrement 20
+!
+interface Vlan11
+ description Data Vlan
+ ip address 10.10.11.3 255.255.255.0
+ standby 11 ip 10.10.11.1
+ standby 11 preempt
+ standby 11 authentication md5 key-string SecGroup11
+ standby 11 track 1 decrement 20
+!
+interface Vlan12
+ description Voice
+ ip address 10.10.12.3 255.255.255.0
+ standby 12 ip 10.10.12.1
+ standby 12 preempt
+ standby 12 authentication md5 key-string SecGroup12
+ standby 12 track 1 decrement 20
+!
+interface Vlan13
+ description GUEST
+ ip address 10.10.13.3 255.255.255.0
+ standby 13 ip 10.10.13.1
+ standby 13 preempt
+ standby 13 authentication md5 key-string SecGroup13
+ standby 13 track 1 decrement 20
+!
+interface Vlan14
+ description BYOD
+ ip address 10.10.14.3 255.255.255.0
+ standby 14 ip 10.10.14.1
+ standby 14 preempt
+ standby 14 authentication md5 key-string SecGroup14
+ standby 14 track 1 decrement 20
+!
+interface Vlan15
+ description Corentine Vlan
+ ip address 10.10.15.3 255.255.255.0
+ standby 15 ip 10.10.15.1
+ standby 15 preempt
+ standby 15 authentication md5 key-string SecGroup15
+ standby 15 track 1 decrement 20
+!
+ip http server
+ip route 0.0.0.0 0.0.0.0 172.16.17.1
+ip ssh time-out 60
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+end
